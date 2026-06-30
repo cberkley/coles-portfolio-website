@@ -1,0 +1,49 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\SourceCode\\cole-portfolio-website\\azure-functions\\coles-portfolio-functions\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{45A8D267-327E-4BA3-8328-6F3E47855EF6}|FunctionApp1\\FunctionApp1.csproj|c:\\sourcecode\\cole-portfolio-website\\azure-functions\\coles-portfolio-functions\\functionapp1\\portfoliofunctions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{45A8D267-327E-4BA3-8328-6F3E47855EF6}|FunctionApp1\\FunctionApp1.csproj|solutionrelative:functionapp1\\portfoliofunctions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 219,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PortfolioFunctions.cs",
+              "DocumentMoniker": "C:\\SourceCode\\cole-portfolio-website\\azure-functions\\coles-portfolio-functions\\FunctionApp1\\PortfolioFunctions.cs",
+              "RelativeDocumentMoniker": "FunctionApp1\\PortfolioFunctions.cs",
+              "ToolTip": "C:\\SourceCode\\cole-portfolio-website\\azure-functions\\coles-portfolio-functions\\FunctionApp1\\PortfolioFunctions.cs",
+              "RelativeToolTip": "FunctionApp1\\PortfolioFunctions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-29T19:14:29.577Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
