@@ -7,6 +7,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using PortfolioFunctions.Models;
+using PortfolioFunctions.Utility;
 
 namespace PortfolioFunctions.Functions
 {
@@ -71,6 +72,9 @@ namespace PortfolioFunctions.Functions
         public async Task<HttpResponseData> AddProfessionalProject(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "professional-projects")] HttpRequestData req)
         {
+            if (!AuthHelper.IsAuthenticated(req))
+                return req.CreateResponse(HttpStatusCode.Unauthorized);
+
             _logger.LogInformation("Adding a professional project to Cosmos DB.");
 
             var project = await req.ReadFromJsonAsync<ProfessionalProject>();
@@ -100,6 +104,9 @@ namespace PortfolioFunctions.Functions
             [HttpTrigger(AuthorizationLevel.Function, "put", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
         {
+            if (!AuthHelper.IsAuthenticated(req))
+                return req.CreateResponse(HttpStatusCode.Unauthorized);
+
             _logger.LogInformation("Updating a professional project in Cosmos DB.");
 
             var updatedProject = await req.ReadFromJsonAsync<ProfessionalProject>();
@@ -136,6 +143,9 @@ namespace PortfolioFunctions.Functions
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
         {
+            if (!AuthHelper.IsAuthenticated(req))
+                return req.CreateResponse(HttpStatusCode.Unauthorized);
+
             _logger.LogInformation("Deleting a professional project from Cosmos DB.");
 
             try
