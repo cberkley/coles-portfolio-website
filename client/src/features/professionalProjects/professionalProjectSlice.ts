@@ -11,11 +11,11 @@ type ProfesionalProject = {
 }
 
 type ProfesionalProjectState = {
-  value: ProfesionalProject;
+  value: ProfesionalProject[];
 }
 
 const initialState: ProfesionalProjectState = {
-  value: {} as ProfesionalProject,
+  value: [] as ProfesionalProject[],
 }
 
 const professionalProjectsSlice = createSlice({
