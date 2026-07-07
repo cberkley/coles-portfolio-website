@@ -5,13 +5,13 @@ import {
   reset,
 } from '../features/counter/counterSlice.ts'
 
-export function HomePage() {
+export function ProfessionalProjectsPage() {
   const count = useAppSelector((state) => state.counter.value)
   const dispatch = useAppDispatch()
 
   return (
     <section className="panel">
-      <h2>Home</h2>
+      <h2>Professional Projects</h2>
       <p style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
         Redux and Router are configured. Use this page as your feature starting
         point.
