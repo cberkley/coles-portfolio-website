@@ -1,0 +1,256 @@
+﻿{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI Document on Azure Functions",
+    "description": "This is the OpenAPI Document on Azure Functions",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7071/api"
+    }
+  ],
+  "paths": {
+    "/professional-projects": {
+      "get": {
+        "tags": [
+          "ProfessionalProjects"
+        ],
+        "summary": "Get all professional projects",
+        "operationId": "GetProfessionalProjects",
+        "responses": {
+          "200": {
+            "description": "List of professional projects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/professionalProject"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-ms-visibility": "important"
+      },
+      "post": {
+        "tags": [
+          "ProfessionalProjects"
+        ],
+        "summary": "Add a new professional project",
+        "operationId": "AddProfessionalProject",
+        "requestBody": {
+          "description": "The project to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/professionalProject"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The created project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/professionalProject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid project data"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "x-ms-client-principal-id": [ ]
+          }
+        ],
+        "x-ms-visibility": "important"
+      }
+    },
+    "/professional-projects/{id}": {
+      "get": {
+        "tags": [
+          "ProfessionalProjects"
+        ],
+        "summary": "Get a professional project by ID",
+        "operationId": "GetProfessionalProjectById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/professionalProject"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found"
+          }
+        },
+        "x-ms-visibility": "important"
+      },
+      "put": {
+        "tags": [
+          "ProfessionalProjects"
+        ],
+        "summary": "Update an existing professional project",
+        "operationId": "UpdateProfessionalProject",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The updated project data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/professionalProject"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/professionalProject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid project data"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "x-ms-client-principal-id": [ ]
+          }
+        ],
+        "x-ms-visibility": "important"
+      },
+      "delete": {
+        "tags": [
+          "ProfessionalProjects"
+        ],
+        "summary": "Delete a professional project",
+        "operationId": "DeleteProfessionalProject",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "x-ms-client-principal-id": [ ]
+          }
+        ],
+        "x-ms-visibility": "important"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "professionalProject": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "developerCommentary": {
+            "type": "string",
+            "nullable": true
+          },
+          "marketingSiteUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "demoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "screenshots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "x-ms-client-principal-id": {
+        "type": "apiKey",
+        "name": "X-MS-CLIENT-PRINCIPAL-ID",
+        "in": "header"
+      }
+    }
+  }
+}

@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using PortfolioFunctions.Models;
 using PortfolioFunctions.Utility;
 
@@ -26,6 +29,8 @@ namespace PortfolioFunctions.Functions
         }
 
         [Function("GetProfessionalProjects")]
+        [OpenApiOperation(operationId: "GetProfessionalProjects", tags: new[] { "ProfessionalProjects" }, Summary = "Get all professional projects", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<ProfessionalProject>), Description = "List of professional projects")]
         public async Task<HttpResponseData> GetProfessionalProjects(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "professional-projects")] HttpRequestData req)
         {
@@ -47,6 +52,10 @@ namespace PortfolioFunctions.Functions
         }
 
         [Function("GetProfessionalProjectById")]
+        [OpenApiOperation(operationId: "GetProfessionalProjectById", tags: new[] { "ProfessionalProjects" }, Summary = "Get a professional project by ID", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "Project ID")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ProfessionalProject), Description = "The requested project")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Project not found")]
         public async Task<HttpResponseData> GetProfessionalProjectById(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
@@ -69,6 +78,12 @@ namespace PortfolioFunctions.Functions
         }
 
         [Function("AddProfessionalProject")]
+        [OpenApiOperation(operationId: "AddProfessionalProject", tags: new[] { "ProfessionalProjects" }, Summary = "Add a new professional project", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiSecurity("x-ms-client-principal-id", SecuritySchemeType.ApiKey, In = OpenApiSecurityLocationType.Header, Name = "X-MS-CLIENT-PRINCIPAL-ID")]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ProfessionalProject), Required = true, Description = "The project to create")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: "application/json", bodyType: typeof(ProfessionalProject), Description = "The created project")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Invalid project data")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Unauthorized, Description = "Unauthorized")]
         public async Task<HttpResponseData> AddProfessionalProject(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "professional-projects")] HttpRequestData req)
         {
@@ -100,6 +115,14 @@ namespace PortfolioFunctions.Functions
         }
 
         [Function("UpdateProfessionalProject")]
+        [OpenApiOperation(operationId: "UpdateProfessionalProject", tags: new[] { "ProfessionalProjects" }, Summary = "Update an existing professional project", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiSecurity("x-ms-client-principal-id", SecuritySchemeType.ApiKey, In = OpenApiSecurityLocationType.Header, Name = "X-MS-CLIENT-PRINCIPAL-ID")]
+        [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "Project ID")]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ProfessionalProject), Required = true, Description = "The updated project data")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ProfessionalProject), Description = "The updated project")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Invalid project data")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Project not found")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Unauthorized, Description = "Unauthorized")]
         public async Task<HttpResponseData> UpdateProfessionalProject(
             [HttpTrigger(AuthorizationLevel.Function, "put", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
@@ -139,6 +162,12 @@ namespace PortfolioFunctions.Functions
         }
 
         [Function("DeleteProfessionalProject")]
+        [OpenApiOperation(operationId: "DeleteProfessionalProject", tags: new[] { "ProfessionalProjects" }, Summary = "Delete a professional project", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiSecurity("x-ms-client-principal-id", SecuritySchemeType.ApiKey, In = OpenApiSecurityLocationType.Header, Name = "X-MS-CLIENT-PRINCIPAL-ID")]
+        [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "Project ID")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NoContent, Description = "Successfully deleted")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Project not found")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Unauthorized, Description = "Unauthorized")]
         public async Task<HttpResponseData> DeleteProfessionalProject(
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)

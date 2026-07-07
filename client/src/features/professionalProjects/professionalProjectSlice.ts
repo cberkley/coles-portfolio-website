@@ -26,7 +26,7 @@ const professionalProjectsSlice = createSlice({
       console.log("state: ", state)
       
       // get professional projects from azure functions
-
+      
     },
   },
 })
