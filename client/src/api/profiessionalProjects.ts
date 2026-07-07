@@ -1,5 +1,5 @@
 ﻿import createClient, { type Middleware } from 'openapi-fetch'
-import type { components, paths } from './schema.d.ts'
+import type { components, paths } from './schema'
 
 export type ProfessionalProject = components['schemas']['professionalProject']
 
