@@ -4,6 +4,8 @@ import {
   type ProfessionalProject,
 } from '../../api/profiessionalProjects'
 
+export type { ProfessionalProject }
+
 const api = new ProfessionalProjectApi()
 
 const LIST_ID = 'LIST' as const
@@ -24,7 +26,9 @@ export const professionalProjectsApi = createApi({
     getProfessionalProjects: builder.query<ProfessionalProject[], void>({
       queryFn: async () => {
         try {
-          return { data: await api.getProfessionalProjects() }
+          const data = await api.getProfessionalProjects()
+          console.log('getProfessionalProjects data:', data)
+          return { data }
         } catch (error) {
           return { error: (error as Error).message }
         }
