@@ -1,4 +1,5 @@
 import type { ProfessionalProject } from '../professionalProjectsApi.ts'
+import { MultilineText } from '../../../components/MultilineText.tsx'
 import styles from './professionalProjects.module.css'
 
 type ProjectListItemProps = {
@@ -17,7 +18,13 @@ export function ProjectListItem({
   return (
     <li className={styles.item}>
       <h3>{project.name}</h3>
-      {project.description && <p>{project.description}</p>}
+      {project.description && <p><MultilineText text={project.description} /></p>}
+      {project.developerCommentary && (
+        <>
+          <h4>Developer Commentary</h4>
+          <p><MultilineText text={project.developerCommentary} /></p>
+        </>
+      )}
       {project.marketingSiteUrl && (
         <a href={project.marketingSiteUrl} target="_blank" rel="noreferrer">
           View marketing site
