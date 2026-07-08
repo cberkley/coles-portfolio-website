@@ -1,5 +1,26 @@
 .hero {
+  margin-bottom: 1.25rem;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   margin-bottom: 2rem;
+  color: #334155;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.intro p {
+  margin: 0;
+}
+
+.siteNote {
+  color: #64748b;
+  font-size: 0.875rem;
 }
 
 .hero h2 {

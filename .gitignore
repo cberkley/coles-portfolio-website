@@ -1,0 +1,22 @@
+# Build output
+publish/
+bin/
+obj/
+
+# Azure Functions local settings
+local.settings.json
+
+# Environment variables
+.env
+.env.*
+
+# VS / Rider
+.vs/
+.idea/
+*.user
+*.suo
+
+# Node
+node_modules/
+dist/
+dist-ssr/

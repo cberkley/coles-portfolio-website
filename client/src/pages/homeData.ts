@@ -55,7 +55,7 @@ export const experience: ExperienceEntry[] = [
     ],
   },
   {
-    company: 'Gale Force Software Corporation / Device IQ',
+    company: 'Gale Force Software Corporation / DeviceIQ',
     roles: [
       {
         title: 'Software Engineer',

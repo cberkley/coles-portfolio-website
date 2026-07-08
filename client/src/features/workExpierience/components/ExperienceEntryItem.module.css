@@ -2,13 +2,13 @@
   position: relative;
   padding-left: 1.5rem;
   padding-bottom: 2rem;
-  border-left: 2px solid #e2e8f0;
 }
 
 .entry:last-child {
-  border-left-color: transparent;
   padding-bottom: 0;
 }
+
+
 
 .entry::before {
   content: '';
@@ -19,6 +19,7 @@
   height: 8px;
   border-radius: 50%;
   background: #3b82f6;
+  z-index: 1;
   border: 2px solid #f1f5f9;
 }
 

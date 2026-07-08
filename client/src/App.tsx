@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <h1>Portfolio Client</h1>
+        <h1>My Portfolio Website</h1>
         <nav>
           <NavLink to="/" end>
             Home
