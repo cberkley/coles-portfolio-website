@@ -19,11 +19,14 @@ namespace PortfolioFunctions
                         var connectionString = Environment.GetEnvironmentVariable("CosmosDbConnection");
                         var client = new CosmosClient(connectionString);
 
-                        // Auto-create database and container on first run
+                        // Auto-create database and containers on first run
                         var databaseName = Environment.GetEnvironmentVariable("CosmosDbDatabaseName");
-                        var containerName = Environment.GetEnvironmentVariable("CosmosDbContainerName");
+                        var professionalProjectsContainer = Environment.GetEnvironmentVariable("CosmosDbContainerName");
+                        var workExperienceContainer = Environment.GetEnvironmentVariable("CosmosDbWorkExperienceContainerName");
+                        
                         var database = client.CreateDatabaseIfNotExistsAsync(databaseName).GetAwaiter().GetResult();
-                        database.Database.CreateContainerIfNotExistsAsync(containerName, "/id").GetAwaiter().GetResult();
+                        database.Database.CreateContainerIfNotExistsAsync(professionalProjectsContainer, "/id").GetAwaiter().GetResult();
+                        database.Database.CreateContainerIfNotExistsAsync(workExperienceContainer, "/id").GetAwaiter().GetResult();
 
                         return client;
                     });

@@ -204,6 +204,200 @@
         ],
         "x-ms-visibility": "important"
       }
+    },
+    "/work-experiences": {
+      "get": {
+        "tags": [
+          "WorkExperiences"
+        ],
+        "summary": "Get all work experiences",
+        "operationId": "GetWorkExperiences",
+        "responses": {
+          "200": {
+            "description": "List of work experiences",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/workExperience"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-ms-visibility": "important"
+      },
+      "post": {
+        "tags": [
+          "WorkExperiences"
+        ],
+        "summary": "Add a new work experience",
+        "operationId": "AddWorkExperience",
+        "requestBody": {
+          "description": "The work experience to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/workExperience"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The created work experience",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/workExperience"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid work experience data"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "x-ms-client-principal-id": [ ]
+          }
+        ],
+        "x-ms-visibility": "important"
+      }
+    },
+    "/work-experiences/{id}": {
+      "get": {
+        "tags": [
+          "WorkExperiences"
+        ],
+        "summary": "Get a work experience by ID",
+        "operationId": "GetWorkExperienceById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Work experience ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested work experience",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/workExperience"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Work experience not found"
+          }
+        },
+        "x-ms-visibility": "important"
+      },
+      "put": {
+        "tags": [
+          "WorkExperiences"
+        ],
+        "summary": "Update an existing work experience",
+        "operationId": "UpdateWorkExperience",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Work Experience ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The updated work experience data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/workExperience"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated work experience",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/workExperience"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid work experience data"
+          },
+          "404": {
+            "description": "Work experience not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "x-ms-client-principal-id": [ ]
+          }
+        ],
+        "x-ms-visibility": "important"
+      },
+      "delete": {
+        "tags": [
+          "WorkExperiences"
+        ],
+        "summary": "Delete a work experience",
+        "operationId": "DeleteWorkExperience",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Work experience ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted"
+          },
+          "404": {
+            "description": "Work experience not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "x-ms-client-principal-id": [ ]
+          }
+        ],
+        "x-ms-visibility": "important"
+      }
     }
   },
   "components": {
@@ -239,6 +433,58 @@
             "type": "array",
             "items": {
               "type": "string"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "role": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "period": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "bullets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "workExperience": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "company": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyWebsite": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalDuration": {
+            "type": "string",
+            "nullable": true
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/role"
             },
             "nullable": true
           }

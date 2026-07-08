@@ -41,6 +41,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/work-experiences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all work experiences */
+        get: operations["GetWorkExperiences"];
+        put?: never;
+        /** Add a new work experience */
+        post: operations["AddWorkExperience"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/work-experiences/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a work experience by ID */
+        get: operations["GetWorkExperienceById"];
+        /** Update an existing work experience */
+        put: operations["UpdateWorkExperience"];
+        post?: never;
+        /** Delete a work experience */
+        delete: operations["DeleteWorkExperience"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -53,6 +90,19 @@ export interface components {
             marketingSiteUrl?: string | null;
             demoUrl?: string | null;
             screenshots?: string[] | null;
+        };
+        role: {
+            title?: string | null;
+            period?: string | null;
+            location?: string | null;
+            bullets?: string[] | null;
+        };
+        workExperience: {
+            id?: string | null;
+            company?: string | null;
+            companyWebsite?: string | null;
+            totalDuration?: string | null;
+            roles?: components["schemas"]["role"][] | null;
         };
     };
     responses: never;
@@ -228,6 +278,179 @@ export interface operations {
                 content?: never;
             };
             /** @description Project not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GetWorkExperiences: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of work experiences */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["workExperience"][];
+                };
+            };
+        };
+    };
+    AddWorkExperience: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description The work experience to create */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["workExperience"];
+            };
+        };
+        responses: {
+            /** @description The created work experience */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["workExperience"];
+                };
+            };
+            /** @description Invalid work experience data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GetWorkExperienceById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Work experience ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested work experience */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["workExperience"];
+                };
+            };
+            /** @description Work experience not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UpdateWorkExperience: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Work Experience ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** @description The updated work experience data */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["workExperience"];
+            };
+        };
+        responses: {
+            /** @description The updated work experience */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["workExperience"];
+                };
+            };
+            /** @description Invalid work experience data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Work experience not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DeleteWorkExperience: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Work experience ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Work experience not found */
             404: {
                 headers: {
                     [name: string]: unknown;
