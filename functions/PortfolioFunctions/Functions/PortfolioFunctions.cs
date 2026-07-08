@@ -32,7 +32,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiOperation(operationId: "GetProfessionalProjects", tags: new[] { "ProfessionalProjects" }, Summary = "Get all professional projects", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<ProfessionalProject>), Description = "List of professional projects")]
         public async Task<HttpResponseData> GetProfessionalProjects(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "professional-projects")] HttpRequestData req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "professional-projects")] HttpRequestData req)
         {
             _logger.LogInformation("Retrieving professional projects from Cosmos DB.");
 
@@ -57,7 +57,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ProfessionalProject), Description = "The requested project")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Project not found")]
         public async Task<HttpResponseData> GetProfessionalProjectById(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "professional-projects/{id}")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
         {
             _logger.LogInformation("Retrieving a professional project by id from Cosmos DB.");
@@ -85,7 +85,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Invalid project data")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Unauthorized, Description = "Unauthorized")]
         public async Task<HttpResponseData> AddProfessionalProject(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "professional-projects")] HttpRequestData req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "professional-projects")] HttpRequestData req)
         {
             if (!AuthHelper.IsAuthenticated(req))
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
@@ -124,7 +124,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Project not found")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Unauthorized, Description = "Unauthorized")]
         public async Task<HttpResponseData> UpdateProfessionalProject(
-            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "professional-projects/{id}")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
         {
             if (!AuthHelper.IsAuthenticated(req))
@@ -169,7 +169,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Project not found")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Unauthorized, Description = "Unauthorized")]
         public async Task<HttpResponseData> DeleteProfessionalProject(
-            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "professional-projects/{id}")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
         {
             if (!AuthHelper.IsAuthenticated(req))

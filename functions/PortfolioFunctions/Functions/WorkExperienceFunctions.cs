@@ -32,7 +32,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiOperation(operationId: "GetWorkExperiences", tags: new[] { "WorkExperiences" }, Summary = "Get all work experiences", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<WorkExperience>), Description = "List of work experiences")]
         public async Task<HttpResponseData> GetWorkExperiences(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "work-experiences")] HttpRequestData req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "work-experiences")] HttpRequestData req)
         {
             _logger.LogInformation("Retrieving work experiences from Cosmos DB.");
 
@@ -57,7 +57,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(WorkExperience), Description = "The requested work experience")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Work experience not found")]
         public async Task<HttpResponseData> GetWorkExperienceById(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "work-experiences/{id}")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "work-experiences/{id}")] HttpRequestData req,
             string id)
         {
             _logger.LogInformation("Retrieving a work experience by id from Cosmos DB.");
@@ -85,7 +85,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Invalid work experience data")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Unauthorized, Description = "Unauthorized")]
         public async Task<HttpResponseData> AddWorkExperience(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "work-experiences")] HttpRequestData req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "work-experiences")] HttpRequestData req)
         {
             if (!AuthHelper.IsAuthenticated(req))
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
@@ -124,7 +124,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Work experience not found")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Unauthorized, Description = "Unauthorized")]
         public async Task<HttpResponseData> UpdateWorkExperience(
-            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "work-experiences/{id}")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "work-experiences/{id}")] HttpRequestData req,
             string id)
         {
             if (!AuthHelper.IsAuthenticated(req))
@@ -169,7 +169,7 @@ namespace PortfolioFunctions.Functions
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Work experience not found")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Unauthorized, Description = "Unauthorized")]
         public async Task<HttpResponseData> DeleteWorkExperience(
-            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "work-experiences/{id}")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "work-experiences/{id}")] HttpRequestData req,
             string id)
         {
             if (!AuthHelper.IsAuthenticated(req))
