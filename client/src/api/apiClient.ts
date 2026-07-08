@@ -1,5 +1,5 @@
 import createClient, { type Middleware } from 'openapi-fetch'
-import type { components, paths } from './schema'
+import type { paths } from './schema'
 
    
 export function ApiClient() {

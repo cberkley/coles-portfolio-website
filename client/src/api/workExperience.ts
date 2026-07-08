@@ -1,5 +1,4 @@
-import createClient, { type Middleware } from 'openapi-fetch'
-import type { components, paths } from './schema'
+import type { components } from './schema'
 import { ApiClient } from './apiClient';
 
 export type WorkExperience = components['schemas']['workExperience'];

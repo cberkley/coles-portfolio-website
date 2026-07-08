@@ -3,9 +3,17 @@ import styles from './ExperienceEntryItem.module.css'
 
 type ExperienceEntryItemProps = {
   entry: WorkExperience
+  isAdmin: boolean
+  onEdit: (entry: WorkExperience) => void
+  onDelete: (entry: WorkExperience) => void
 }
 
-export function ExperienceEntryItem({ entry }: ExperienceEntryItemProps) {
+export function ExperienceEntryItem({
+  entry,
+  isAdmin,
+  onEdit,
+  onDelete,
+}: ExperienceEntryItemProps) {
   return (
     <li className={styles.entry}>
       <p className={styles.companyName}>
@@ -33,6 +41,17 @@ export function ExperienceEntryItem({ entry }: ExperienceEntryItemProps) {
           </div>
         ))}
       </div>
+
+      {isAdmin && (
+        <div className={styles.actions}>
+          <button type="button" onClick={() => onEdit(entry)}>
+            Edit
+          </button>
+          <button type="button" onClick={() => onDelete(entry)}>
+            Delete
+          </button>
+        </div>
+      )}
     </li>
   )
 }
