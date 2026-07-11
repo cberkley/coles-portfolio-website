@@ -7,7 +7,7 @@ export function AboutPage() {
     <Reveal component="section">
       <Box sx={{ mb: 3 }}>
         <Typography variant="overline" sx={{ color: 'secondary.main' }}>
-          Colophon
+          Would you Like to Know More?
         </Typography>
         <Typography variant="h4" sx={{ fontWeight: 700 }}>
           About
