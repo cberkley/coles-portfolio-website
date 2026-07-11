@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import {
   useGetProfessionalProjectsQuery,
   useDeleteProfessionalProjectMutation,
@@ -6,7 +10,6 @@ import {
 } from '../professionalProjectsApi.ts'
 import { ProjectForm } from './ProjectForm.tsx'
 import { ProjectListItem } from './ProjectListItem.tsx'
-import styles from './professionalProjects.module.css'
 
 type ProjectListProps = {
   isAdmin: boolean
@@ -26,29 +29,29 @@ export function ProjectList({ isAdmin }: ProjectListProps) {
   }
 
   if (isLoading) {
-    return <p className={styles.status}>Loading projects…</p>
+    return <Typography color="text.secondary">Loading projects…</Typography>
   }
 
   if (isError) {
     return (
-      <p className={styles.error} role="alert">
-        Failed to load projects: {String(error)}{' '}
-        <button type="button" onClick={() => refetch()}>
-          Retry
-        </button>
-      </p>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography color="error" role="alert">
+          Failed to load projects: {String(error)}
+        </Typography>
+        <Button size="small" onClick={() => refetch()}>Retry</Button>
+      </Box>
     )
   }
 
   if (!projects || projects.length === 0) {
-    return <p className={styles.status}>No professional projects yet.</p>
+    return <Typography color="text.secondary">No professional projects yet.</Typography>
   }
 
   return (
-    <ul className={styles.list}>
+    <Stack component="ul" spacing={2} sx={{ listStyle: 'none', m: 0, p: 0, mt: 1 }}>
       {projects.map((project, index) =>
         editingId === project.id ? (
-          <li key={project.id ?? index} className={styles.item}>
+          <li key={project.id ?? index}>
             <ProjectForm initial={project} onDone={() => setEditingId(null)} />
           </li>
         ) : (
@@ -61,6 +64,6 @@ export function ProjectList({ isAdmin }: ProjectListProps) {
           />
         ),
       )}
-    </ul>
+    </Stack>
   )
 }

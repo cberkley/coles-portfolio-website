@@ -1,10 +1,15 @@
 import { useState } from 'react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Paper from '@mui/material/Paper'
+import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import {
   useAddWorkExperienceMutation,
   useUpdateWorkExperienceMutation,
   type WorkExperience,
 } from '../workExperienceApi.ts'
-import styles from './workExperience.module.css'
 
 type Role = NonNullable<WorkExperience['roles']>[number]
 
@@ -37,9 +42,7 @@ export function WorkExperienceForm({ initial, onDone }: WorkExperienceFormProps)
     useUpdateWorkExperienceMutation()
   const isSaving = isAdding || isUpdating
 
-  function handleFieldChange(
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) {
+  function handleFieldChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
     setForm((prev) => ({ ...prev, [name]: value }))
   }
@@ -77,83 +80,102 @@ export function WorkExperienceForm({ initial, onDone }: WorkExperienceFormProps)
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <input
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 1,
+        my: 1.5,
+        p: 2,
+        border: '1px dashed',
+        borderColor: 'divider',
+        borderRadius: 2,
+      }}
+    >
+      <TextField
         name="company"
         value={form.company ?? ''}
         onChange={handleFieldChange}
-        placeholder="Company *"
+        label="Company"
         required
       />
-      <input
+      <TextField
         name="companyWebsite"
         type="url"
         value={form.companyWebsite ?? ''}
         onChange={handleFieldChange}
-        placeholder="Company website"
+        label="Company website"
       />
-      <input
+      <TextField
         name="totalDuration"
         value={form.totalDuration ?? ''}
         onChange={handleFieldChange}
-        placeholder="Total duration (e.g. 3 yrs 6 mos)"
+        label="Total duration (e.g. 3 yrs 6 mos)"
       />
 
-      <p className={styles.rolesLabel}>Roles</p>
+      <Typography variant="subtitle2" sx={{ mt: 1 }}>Roles</Typography>
 
       {(form.roles ?? []).map((role, index) => (
-        <div key={index} className={styles.roleGroup}>
-          <div className={styles.roleGroupHeader}>
-            <span>Role {index + 1}</span>
-            <button
-              type="button"
+        <Paper key={index} sx={{ p: 1.5 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+            <Typography variant="caption" sx={{ fontWeight: 600 }} color="text.secondary">
+              Role {index + 1}
+            </Typography>
+            <Button
+              size="small"
+              color="error"
               onClick={() => removeRole(index)}
               disabled={(form.roles ?? []).length === 1}
             >
               Remove
-            </button>
-          </div>
-          <input
-            value={role.title ?? ''}
-            onChange={(e) => updateRole(index, { title: e.target.value })}
-            placeholder="Title *"
-            required
-          />
-          <input
-            value={role.period ?? ''}
-            onChange={(e) => updateRole(index, { period: e.target.value })}
-            placeholder="Period (e.g. Jan 2019 – Mar 2020)"
-          />
-          <input
-            value={role.location ?? ''}
-            onChange={(e) => updateRole(index, { location: e.target.value })}
-            placeholder="Location"
-          />
-          <textarea
-            value={(role.bullets ?? []).join('\n')}
-            onChange={(e) =>
-              updateRole(index, {
-                bullets: e.target.value.split('\n').filter(Boolean),
-              })
-            }
-            placeholder="Bullet points (one per line)"
-            rows={3}
-          />
-        </div>
+            </Button>
+          </Box>
+          <Stack spacing={1}>
+            <TextField
+              value={role.title ?? ''}
+              onChange={(e) => updateRole(index, { title: e.target.value })}
+              label="Title"
+              required
+            />
+            <TextField
+              value={role.period ?? ''}
+              onChange={(e) => updateRole(index, { period: e.target.value })}
+              label="Period (e.g. Jan 2019 – Mar 2020)"
+            />
+            <TextField
+              value={role.location ?? ''}
+              onChange={(e) => updateRole(index, { location: e.target.value })}
+              label="Location"
+            />
+            <TextField
+              value={(role.bullets ?? []).join('\n')}
+              onChange={(e) =>
+                updateRole(index, {
+                  bullets: e.target.value.split('\n').filter(Boolean),
+                })
+              }
+              label="Bullet points (one per line)"
+              multiline
+              rows={3}
+            />
+          </Stack>
+        </Paper>
       ))}
 
-      <button type="button" onClick={addRole}>
+      <Button size="small" onClick={addRole} sx={{ alignSelf: 'flex-start' }}>
         + Add role
-      </button>
+      </Button>
 
-      <div className={styles.formActions}>
-        <button type="submit" disabled={isSaving}>
+      <Stack direction="row" spacing={1} sx={{ mt: 0.5 }}>
+        <Button type="submit" variant="contained" disabled={isSaving}>
           {isSaving ? 'Saving…' : isEditing ? 'Save' : 'Add experience'}
-        </button>
-        <button type="button" onClick={onDone} disabled={isSaving}>
+        </Button>
+        <Button onClick={onDone} disabled={isSaving}>
           Cancel
-        </button>
-      </div>
-    </form>
+        </Button>
+      </Stack>
+    </Box>
   )
 }

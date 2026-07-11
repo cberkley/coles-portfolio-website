@@ -1,10 +1,13 @@
 import { useState } from 'react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
 import {
   useAddProfessionalProjectMutation,
   useUpdateProfessionalProjectMutation,
   type ProfessionalProject,
 } from '../professionalProjectsApi.ts'
-import styles from './professionalProjects.module.css'
 
 type ProjectFormProps = {
   /** When provided, the form edits this project; otherwise it creates a new one. */
@@ -52,57 +55,73 @@ export function ProjectForm({ initial, onDone }: ProjectFormProps) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <input
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 1,
+        my: 1.5,
+        p: 2,
+        border: '1px dashed',
+        borderColor: 'divider',
+        borderRadius: 2,
+      }}
+    >
+      <TextField
         name="name"
         value={form.name ?? ''}
         onChange={handleChange}
-        placeholder="Project name *"
+        label="Project name"
         required
       />
-      <textarea
+      <TextField
         name="description"
         value={form.description ?? ''}
         onChange={handleChange}
-        placeholder="Description"
+        label="Description"
+        multiline
         rows={3}
       />
-      <textarea
+      <TextField
         name="developerCommentary"
         value={form.developerCommentary ?? ''}
         onChange={handleChange}
-        placeholder="Developer commentary"
+        label="Developer commentary"
+        multiline
         rows={3}
       />
-      <input
+      <TextField
         name="marketingSiteUrl"
         type="url"
         value={form.marketingSiteUrl ?? ''}
         onChange={handleChange}
-        placeholder="Marketing site URL"
+        label="Marketing site URL"
       />
-      <input
+      <TextField
         name="demoUrl"
         type="url"
         value={form.demoUrl ?? ''}
         onChange={handleChange}
-        placeholder="Demo URL"
+        label="Demo URL"
       />
-      <textarea
+      <TextField
         name="screenshots"
         value={(form.screenshots ?? []).join('\n')}
         onChange={handleChange}
-        placeholder="Screenshot URLs (one per line)"
+        label="Screenshot URLs (one per line)"
+        multiline
         rows={3}
       />
-      <div className={styles.formActions}>
-        <button type="submit" disabled={isSaving}>
+      <Stack direction="row" spacing={1} sx={{ mt: 0.5 }}>
+        <Button type="submit" variant="contained" disabled={isSaving}>
           {isSaving ? 'Saving…' : isEditing ? 'Save' : 'Add project'}
-        </button>
-        <button type="button" onClick={onDone} disabled={isSaving}>
+        </Button>
+        <Button onClick={onDone} disabled={isSaving}>
           Cancel
-        </button>
-      </div>
-    </form>
+        </Button>
+      </Stack>
+    </Box>
   )
 }

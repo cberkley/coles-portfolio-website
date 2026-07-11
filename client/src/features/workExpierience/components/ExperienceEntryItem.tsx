@@ -1,5 +1,9 @@
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import type { WorkExperience } from '../workExperienceApi.ts'
-import styles from './ExperienceEntryItem.module.css'
+import { ACCENT } from '../../../theme.ts'
 
 type ExperienceEntryItemProps = {
   entry: WorkExperience
@@ -15,43 +19,94 @@ export function ExperienceEntryItem({
   onDelete,
 }: ExperienceEntryItemProps) {
   return (
-    <li className={styles.entry}>
-      <p className={styles.companyName}>
+    <Box
+      component="li"
+      sx={{
+        position: 'relative',
+        pl: 3.5,
+        pb: 4,
+        listStyle: 'none',
+        '&:last-child': { pb: 0 },
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          left: '1px',
+          top: '0.3rem',
+          width: 12,
+          height: 12,
+          borderRadius: '50%',
+          backgroundImage: `linear-gradient(135deg, ${ACCENT.from}, ${ACCENT.to})`,
+          zIndex: 1,
+          border: '3px solid',
+          borderColor: 'background.default',
+          boxShadow: `0 0 0 3px ${ACCENT.from}22`,
+        },
+        // Connector segment from this dot down to the next item's dot.
+        // Omitted on the last item so the line stops at the final dot.
+        '&:not(:last-child)::after': {
+          content: '""',
+          position: 'absolute',
+          left: '6px',
+          top: 'calc(0.3rem + 6px)',
+          height: '100%',
+          width: '2px',
+          borderRadius: '2px',
+          backgroundImage: `linear-gradient(to bottom, ${ACCENT.from}, ${ACCENT.to})`,
+          opacity: 0.5,
+        },
+      }}
+    >
+      <Typography
+        variant="h6"
+        sx={{ fontWeight: 700, fontFamily: '"Space Grotesk", sans-serif' }}
+        color="text.primary"
+        gutterBottom
+      >
         {entry.company}
         {entry.totalDuration && (
-          <span className={styles.companyDuration}>· {entry.totalDuration}</span>
+          <Typography
+            component="span"
+            variant="body2"
+            color="text.secondary"
+            sx={{ ml: 1, fontFamily: '"Inter", sans-serif', fontWeight: 400 }}
+          >
+            · {entry.totalDuration}
+          </Typography>
         )}
-      </p>
+      </Typography>
 
-      <div className={styles.roles}>
+      <Stack spacing={1.5}>
         {entry.roles?.map((role) => (
-          <div key={`${role.title}-${role.period}`} className={styles.role}>
-            <p className={styles.roleTitle}>{role.title}</p>
-            <p className={styles.roleMeta}>
+          <Box key={`${role.title}-${role.period}`}>
+            <Typography variant="body2" sx={{ fontWeight: 600 }} color="text.primary">
+              {role.title}
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'secondary.main', fontWeight: 600, display: 'block', mb: 0.5 }}>
               {role.period}
               {role.location && ` · ${role.location}`}
-            </p>
+            </Typography>
             {role.bullets && (
-              <ul className={styles.bullets}>
+              <Box
+                component="ul"
+                sx={{ m: 0, pl: 2.5, '& li': { mb: 0.25 } }}
+              >
                 {role.bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
+                  <Box component="li" key={bullet}>
+                    <Typography variant="body2" color="text.secondary">{bullet}</Typography>
+                  </Box>
                 ))}
-              </ul>
+              </Box>
             )}
-          </div>
+          </Box>
         ))}
-      </div>
+      </Stack>
 
       {isAdmin && (
-        <div className={styles.actions}>
-          <button type="button" onClick={() => onEdit(entry)}>
-            Edit
-          </button>
-          <button type="button" onClick={() => onDelete(entry)}>
-            Delete
-          </button>
-        </div>
+        <Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
+          <Button size="small" onClick={() => onEdit(entry)}>Edit</Button>
+          <Button size="small" color="error" onClick={() => onDelete(entry)}>Delete</Button>
+        </Stack>
       )}
-    </li>
+    </Box>
   )
 }

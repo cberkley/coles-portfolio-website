@@ -1,11 +1,23 @@
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import { Reveal } from '../components/Reveal.tsx'
+
 export function AboutPage() {
   return (
-    <section className="panel">
-      <h2>About</h2>
-      <p style={{ marginTop: '0.5rem' }}>
-        This project uses React + TypeScript + Vite, with Redux Toolkit for
-        state and React Router for client-side navigation.
-      </p>
-    </section>
+    <Reveal component="section">
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="overline" sx={{ color: 'secondary.main' }}>
+          Colophon
+        </Typography>
+        <Typography variant="h4" sx={{ fontWeight: 700 }}>
+          About
+        </Typography>
+      </Box>
+      <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.8, maxWidth: 620 }}>
+        This project is built with React, TypeScript, and Vite, using Redux Toolkit
+        for state management and React Router for client-side navigation. The
+        interface is composed with Material UI and a custom theme.
+      </Typography>
+    </Reveal>
   )
 }

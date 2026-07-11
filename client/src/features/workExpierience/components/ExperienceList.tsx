@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 import {
   useGetWorkExperiencesQuery,
   useDeleteWorkExperienceMutation,
@@ -6,7 +9,6 @@ import {
 } from '../workExperienceApi.ts'
 import { ExperienceEntryItem } from './ExperienceEntryItem.tsx'
 import { WorkExperienceForm } from './WorkExperienceForm.tsx'
-import styles from './workExperience.module.css'
 
 type ExperienceListProps = {
   isAdmin: boolean
@@ -26,26 +28,35 @@ export function ExperienceList({ isAdmin }: ExperienceListProps) {
   }
 
   if (isLoading) {
-    return <p className={styles.status}>Loading experience…</p>
+    return <Typography color="text.secondary">Loading experience…</Typography>
   }
 
   if (isError) {
     return (
-      <p className={styles.error} role="alert">
-        Failed to load experience: {String(error)}{' '}
-        <button type="button" onClick={() => refetch()}>
-          Retry
-        </button>
-      </p>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography color="error" role="alert">
+          Failed to load experience: {String(error)}
+        </Typography>
+        <Button size="small" onClick={() => refetch()}>Retry</Button>
+      </Box>
     )
   }
 
   if (!experiences || experiences.length === 0) {
-    return <p className={styles.status}>No work experience yet.</p>
+    return <Typography color="text.secondary">No work experience yet.</Typography>
   }
 
   return (
-    <ul className={styles.timeline}>
+    <Box
+      component="ul"
+      sx={{
+        listStyle: 'none',
+        m: 0,
+        p: 0,
+        mt: 1,
+        pl: 0,
+      }}
+    >
       {experiences.map((entry, index) =>
         editingId === entry.id ? (
           <li key={entry.id ?? index}>
@@ -64,6 +75,6 @@ export function ExperienceList({ isAdmin }: ExperienceListProps) {
           />
         ),
       )}
-    </ul>
+    </Box>
   )
 }
