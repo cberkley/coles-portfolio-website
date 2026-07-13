@@ -15,9 +15,9 @@ export const workExperienceApi = createApi({
     getWorkExperiences: builder.query<WorkExperience[], void>({
       queryFn: async () => {
         try {
-          return { data: await api.getWorkExperiences() }
+          return { data: await api.getWorkExperiences() };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       providesTags: (result) =>
@@ -35,9 +35,9 @@ export const workExperienceApi = createApi({
     getWorkExperienceById: builder.query<WorkExperience, string>({
       queryFn: async (id) => {
         try {
-          return { data: await api.getWorkExperienceById(id) }
+          return { data: await api.getWorkExperienceById(id) };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       providesTags: (_result, _error, id) => [{ type: 'WorkExperience', id }],
@@ -46,9 +46,9 @@ export const workExperienceApi = createApi({
     addWorkExperience: builder.mutation<WorkExperience, WorkExperience>({
       queryFn: async (entry) => {
         try {
-          return { data: await api.addWorkExperience(entry) }
+          return { data: await api.addWorkExperience(entry) };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       invalidatesTags: [{ type: 'WorkExperience', id: LIST_ID }],
@@ -60,9 +60,9 @@ export const workExperienceApi = createApi({
     >({
       queryFn: async ({ id, entry }) => {
         try {
-          return { data: await api.updateWorkExperience(id, entry) }
+          return { data: await api.updateWorkExperience(id, entry) };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       invalidatesTags: (_result, _error, { id }) => [
@@ -74,10 +74,10 @@ export const workExperienceApi = createApi({
     deleteWorkExperience: builder.mutation<void, string>({
       queryFn: async (id) => {
         try {
-          await api.deleteWorkExperience(id)
-          return { data: undefined }
+          await api.deleteWorkExperience(id);
+          return { data: undefined };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       invalidatesTags: (_result, _error, id) => [

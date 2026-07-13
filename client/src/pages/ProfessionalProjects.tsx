@@ -8,8 +8,8 @@ import { ProjectList } from '../features/professionalProjects/components/Project
 import { Reveal } from '../components/Reveal.tsx'
 
 export function ProfessionalProjectsPage() {
-  const { isAdmin } = userIsAdmin()
-  const [isAdding, setIsAdding] = useState(false)
+  const { isAdmin } = userIsAdmin();
+  const [isAdding, setIsAdding] = useState(false);
 
   return (
     <Reveal component="section">

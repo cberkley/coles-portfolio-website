@@ -26,11 +26,10 @@ export const professionalProjectsApi = createApi({
     getProfessionalProjects: builder.query<ProfessionalProject[], void>({
       queryFn: async () => {
         try {
-          const data = await api.getProfessionalProjects()
-          console.log('getProfessionalProjects data:', data)
-          return { data }
+          const data = await api.getProfessionalProjects();
+          return { data };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       providesTags: (result) =>
@@ -48,9 +47,9 @@ export const professionalProjectsApi = createApi({
     getProfessionalProjectById: builder.query<ProfessionalProject, string>({
       queryFn: async (id) => {
         try {
-          return { data: await api.getProfessionalProjectById(id) }
+          return { data: await api.getProfessionalProjectById(id) };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       providesTags: (_result, _error, id) => [
@@ -64,9 +63,9 @@ export const professionalProjectsApi = createApi({
     >({
       queryFn: async (project) => {
         try {
-          return { data: await api.addProfessionalProject(project) }
+          return { data: await api.addProfessionalProject(project) };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       invalidatesTags: [{ type: 'ProfessionalProject', id: LIST_ID }],
@@ -78,9 +77,9 @@ export const professionalProjectsApi = createApi({
     >({
       queryFn: async ({ id, project }) => {
         try {
-          return { data: await api.updateProfessionalProject(id, project) }
+          return { data: await api.updateProfessionalProject(id, project) };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       invalidatesTags: (_result, _error, { id }) => [
@@ -92,10 +91,10 @@ export const professionalProjectsApi = createApi({
     deleteProfessionalProject: builder.mutation<void, string>({
       queryFn: async (id) => {
         try {
-          await api.deleteProfessionalProject(id)
-          return { data: undefined }
+          await api.deleteProfessionalProject(id);
+          return { data: undefined };
         } catch (error) {
-          return { error: (error as Error).message }
+          return { error: (error as Error).message };
         }
       },
       invalidatesTags: (_result, _error, id) => [

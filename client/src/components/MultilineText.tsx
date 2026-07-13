@@ -8,5 +8,5 @@ export function MultilineText({ text }: { text: string }) {
         </span>
       ))}
     </>
-  )
+  );
 }

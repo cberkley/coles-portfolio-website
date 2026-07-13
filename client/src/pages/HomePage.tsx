@@ -22,8 +22,8 @@ const TECH = [
 ]
 
 export function HomePage() {
-  const { isAdmin } = userIsAdmin()
-  const [isAdding, setIsAdding] = useState(false)
+  const { isAdmin } = userIsAdmin();
+  const [isAdding, setIsAdding] = useState(false);
 
   return (
     <Box>

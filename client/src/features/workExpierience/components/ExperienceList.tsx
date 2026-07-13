@@ -11,19 +11,18 @@ import { ExperienceEntryItem } from './ExperienceEntryItem.tsx'
 import { WorkExperienceForm } from './WorkExperienceForm.tsx'
 
 type ExperienceListProps = {
-  isAdmin: boolean
+  isAdmin: boolean;
 }
 
 export function ExperienceList({ isAdmin }: ExperienceListProps) {
-  const { data: experiences, isLoading, isError, error, refetch } =
-    useGetWorkExperiencesQuery()
-  const [deleteExperience] = useDeleteWorkExperienceMutation()
-  const [editingId, setEditingId] = useState<string | null>(null)
+  const { data: experiences, isLoading, isError, error, refetch } = useGetWorkExperiencesQuery();
+  const [deleteExperience] = useDeleteWorkExperienceMutation();
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   async function handleDelete(entry: WorkExperience) {
     const label = entry.company ?? 'this experience'
     if (entry.id && window.confirm(`Delete "${label}"? This cannot be undone.`)) {
-      await deleteExperience(entry.id)
+      await deleteExperience(entry.id);
     }
   }
 

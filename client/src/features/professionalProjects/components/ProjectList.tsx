@@ -18,13 +18,13 @@ type ProjectListProps = {
 export function ProjectList({ isAdmin }: ProjectListProps) {
   const { data: projects, isLoading, isError, error, refetch } =
     useGetProfessionalProjectsQuery()
-  const [deleteProject] = useDeleteProfessionalProjectMutation()
-  const [editingId, setEditingId] = useState<string | null>(null)
+  const [deleteProject] = useDeleteProfessionalProjectMutation();
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   async function handleDelete(project: ProfessionalProject) {
-    const label = project.name ?? 'this project'
+    const label = project.name ?? 'this project';
     if (project.id && window.confirm(`Delete "${label}"? This cannot be undone.`)) {
-      await deleteProject(project.id)
+      await deleteProject(project.id);
     }
   }
 

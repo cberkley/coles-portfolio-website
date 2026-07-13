@@ -20,7 +20,7 @@ const NAV_LINKS = [
 ]
 
 function App() {
-  const { mode, toggleColorMode } = useColorMode()
+  const { mode, toggleColorMode } = useColorMode();
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

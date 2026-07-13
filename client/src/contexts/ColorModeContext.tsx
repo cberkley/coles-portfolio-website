@@ -18,14 +18,14 @@ interface ColorModeContextValue {
 const ColorModeContext = createContext<ColorModeContextValue>({
   mode: 'light',
   toggleColorMode: () => {},
-})
+});
 
 export function useColorMode() {
   return useContext(ColorModeContext)
 }
 
 export function ColorModeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<PaletteMode>('light')
+  const [mode, setMode] = useState<PaletteMode>('light');
 
   const colorMode = useMemo(
     () => ({
@@ -34,9 +34,9 @@ export function ColorModeProvider({ children }: { children: ReactNode }) {
         setMode((prev) => (prev === 'light' ? 'dark' : 'light')),
     }),
     [mode],
-  )
+  );
 
-  const theme = useMemo(() => getTheme(mode), [mode])
+  const theme = useMemo(() => getTheme(mode), [mode]);
 
   return (
     <ColorModeContext.Provider value={colorMode}>

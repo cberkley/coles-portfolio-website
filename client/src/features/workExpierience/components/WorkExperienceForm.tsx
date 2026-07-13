@@ -15,8 +15,8 @@ type Role = NonNullable<WorkExperience['roles']>[number]
 
 type WorkExperienceFormProps = {
   /** When provided, the form edits this entry; otherwise it creates a new one. */
-  initial?: WorkExperience
-  onDone: () => void
+  initial?: WorkExperience;
+  onDone: () => void;
 }
 
 const EMPTY_ROLE: Role = {
@@ -34,17 +34,16 @@ const EMPTY_EXPERIENCE: WorkExperience = {
 }
 
 export function WorkExperienceForm({ initial, onDone }: WorkExperienceFormProps) {
-  const isEditing = initial !== undefined
-  const [form, setForm] = useState<WorkExperience>(initial ?? EMPTY_EXPERIENCE)
+  const isEditing = initial !== undefined;
+  const [form, setForm] = useState<WorkExperience>(initial ?? EMPTY_EXPERIENCE);
 
-  const [addExperience, { isLoading: isAdding }] = useAddWorkExperienceMutation()
-  const [updateExperience, { isLoading: isUpdating }] =
-    useUpdateWorkExperienceMutation()
-  const isSaving = isAdding || isUpdating
+  const [addExperience, { isLoading: isAdding }] = useAddWorkExperienceMutation();
+  const [updateExperience, { isLoading: isUpdating }] = useUpdateWorkExperienceMutation();
+  const isSaving = isAdding || isUpdating;
 
   function handleFieldChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target
-    setForm((prev) => ({ ...prev, [name]: value }))
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   }
 
   function updateRole(index: number, changes: Partial<Role>) {
@@ -52,31 +51,31 @@ export function WorkExperienceForm({ initial, onDone }: WorkExperienceFormProps)
       const roles = [...(prev.roles ?? [])]
       roles[index] = { ...roles[index], ...changes }
       return { ...prev, roles }
-    })
+    });
   }
 
   function addRole() {
     setForm((prev) => ({
       ...prev,
       roles: [...(prev.roles ?? []), { ...EMPTY_ROLE }],
-    }))
+    }));
   }
 
   function removeRole(index: number) {
     setForm((prev) => ({
       ...prev,
       roles: (prev.roles ?? []).filter((_, i) => i !== index),
-    }))
+    }));
   }
 
   async function handleSubmit(event: React.FormEvent) {
-    event.preventDefault()
+    event.preventDefault();
     if (isEditing && form.id) {
-      await updateExperience({ id: form.id, entry: form }).unwrap()
+      await updateExperience({ id: form.id, entry: form }).unwrap();
     } else {
-      await addExperience(form).unwrap()
+      await addExperience(form).unwrap();
     }
-    onDone()
+    onDone();
   }
 
   return (

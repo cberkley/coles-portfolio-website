@@ -8,10 +8,10 @@ import { MultilineText } from '../../../components/MultilineText.tsx'
 import { ACCENT } from '../../../theme.ts'
 
 type ProjectListItemProps = {
-  project: ProfessionalProject
-  isAdmin: boolean
-  onEdit: (project: ProfessionalProject) => void
-  onDelete: (project: ProfessionalProject) => void
+  project: ProfessionalProject;
+  isAdmin: boolean;
+  onEdit: (project: ProfessionalProject) => void;
+  onDelete: (project: ProfessionalProject) => void;
 }
 
 export function ProjectListItem({
