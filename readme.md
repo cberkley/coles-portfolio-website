@@ -2,9 +2,12 @@
 
 This is the client-side UI for Cole's portfolio application, built with React, TypeScript, and Vite.
 
-## Current Architecture
+## Architecture
 
-The app is currently structured as a monolith, with business logic living in an Azure Functions layer alongside this client. The plan is to decompose that backend layer into dedicated microservices.
+The React client communicates exclusively with an **Azure Functions** layer, which acts as a Backend for Frontend (BFF). Azure Functions handles authentication, aggregation, and proxying to the underlying microservices — keeping secrets and internal service URLs out of the browser.
+
+### Current State
+The app is currently a monolith with all business logic living directly in the Azure Functions layer. The plan is to decompose that logic into dedicated microservices that Azure Functions will orchestrate.
 
 ## Planned Microservices
 
