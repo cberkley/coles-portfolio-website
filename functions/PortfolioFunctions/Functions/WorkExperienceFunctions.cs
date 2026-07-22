@@ -9,6 +9,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PortfolioFunctions.Clients.Experience;
 using PortfolioFunctions.Models;
 using PortfolioFunctions.Utility;
 
@@ -17,15 +18,12 @@ namespace PortfolioFunctions.Functions
     public class WorkExperienceFunctions
     {
         private readonly ILogger _logger;
-        private readonly Container _container;
+        private readonly ExperienceServiceClient _experienceServiceClient;
 
-        public WorkExperienceFunctions(ILoggerFactory loggerFactory, CosmosClient cosmosClient)
+        public WorkExperienceFunctions(ILoggerFactory loggerFactory, ExperienceServiceClient experienceServiceClient)
         {
             _logger = loggerFactory.CreateLogger<WorkExperienceFunctions>();
-
-            var databaseName = Environment.GetEnvironmentVariable("CosmosDbDatabaseName");
-            var containerName = Environment.GetEnvironmentVariable("CosmosDbWorkExperienceContainerName");
-            _container = cosmosClient.GetContainer(databaseName, containerName);
+            _experienceServiceClient = experienceServiceClient;
         }
 
         [Function("GetWorkExperiences")]
@@ -34,17 +32,9 @@ namespace PortfolioFunctions.Functions
         public async Task<HttpResponseData> GetWorkExperiences(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "work-experiences")] HttpRequestData req)
         {
-            _logger.LogInformation("Retrieving work experiences from Cosmos DB.");
+            _logger.LogInformation("Retrieving work experiences from the experience service.");
 
-            var workExperiences = new List<WorkExperience>();
-            var query = new QueryDefinition("SELECT * FROM c");
-
-            using var iterator = _container.GetItemQueryIterator<WorkExperience>(query);
-            while (iterator.HasMoreResults)
-            {
-                var page = await iterator.ReadNextAsync();
-                workExperiences.AddRange(page);
-            }
+            var workExperiences = await _experienceServiceClient.GetWorkExperiencesAsync();
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(workExperiences);
@@ -60,16 +50,16 @@ namespace PortfolioFunctions.Functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "work-experiences/{id}")] HttpRequestData req,
             string id)
         {
-            _logger.LogInformation("Retrieving a work experience by id from Cosmos DB.");
+            _logger.LogInformation("Retrieving a work experience by id from the experience service.");
 
             try
             {
-                var response = await _container.ReadItemAsync<WorkExperience>(id, new PartitionKey(id));
+                var workExperience = await _experienceServiceClient.GetWorkExperienceByIdAsync(id);
                 var result = req.CreateResponse(HttpStatusCode.OK);
-                await result.WriteAsJsonAsync(response.Resource);
+                await result.WriteAsJsonAsync(workExperience);
                 return result;
             }
-            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ExperienceApiException ex) when (ex.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 var notFound = req.CreateResponse(HttpStatusCode.NotFound);
                 await notFound.WriteStringAsync($"Work experience with id '{id}' not found.");
@@ -90,7 +80,7 @@ namespace PortfolioFunctions.Functions
             if (!AuthHelper.IsAuthenticated(req))
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
 
-            _logger.LogInformation("Adding a work experience to Cosmos DB.");
+            _logger.LogInformation("Adding a work experience to the experience service.");
 
             var workExperience = await req.ReadFromJsonAsync<WorkExperience>();
             if (workExperience == null || string.IsNullOrWhiteSpace(workExperience.Company))
@@ -105,12 +95,10 @@ namespace PortfolioFunctions.Functions
                 workExperience.Id = Guid.NewGuid().ToString();
             }
 
-            var created = await _container.CreateItemAsync(
-                workExperience,
-                new PartitionKey(workExperience.Id));
+            var created = await _experienceServiceClient.AddWorkExperienceAsync(workExperience);
 
             var response = req.CreateResponse(HttpStatusCode.Created);
-            await response.WriteAsJsonAsync(created.Resource);
+            await response.WriteAsJsonAsync(created);
             return response;
         }
 
@@ -144,16 +132,13 @@ namespace PortfolioFunctions.Functions
 
             try
             {
-                var response = await _container.ReplaceItemAsync(
-                    updatedWorkExperience,
-                    id,
-                    new PartitionKey(id));
+                var updated = await _experienceServiceClient.UpdateWorkExperienceAsync(id, updatedWorkExperience);
 
                 var result = req.CreateResponse(HttpStatusCode.OK);
-                await result.WriteAsJsonAsync(response.Resource);
+                await result.WriteAsJsonAsync(updated);
                 return result;
             }
-            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ExperienceApiException ex) when (ex.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 var notFound = req.CreateResponse(HttpStatusCode.NotFound);
                 await notFound.WriteStringAsync($"Work experience with id '{id}' not found.");
@@ -175,15 +160,15 @@ namespace PortfolioFunctions.Functions
             if (!AuthHelper.IsAuthenticated(req))
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
 
-            _logger.LogInformation("Deleting a work experience from Cosmos DB.");
+            _logger.LogInformation("Deleting a work experience from the experience service.");
 
             try
             {
-                var response = await _container.DeleteItemAsync<WorkExperience>(id, new PartitionKey(id));
+                await _experienceServiceClient.DeleteWorkExperienceAsync(id);
                 var result = req.CreateResponse(HttpStatusCode.NoContent);
                 return result;
             }
-            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ExperienceApiException ex) when (ex.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 var notFound = req.CreateResponse(HttpStatusCode.NotFound);
                 await notFound.WriteStringAsync($"Work experience with id '{id}' not found.");

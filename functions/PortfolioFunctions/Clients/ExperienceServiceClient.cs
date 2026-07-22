@@ -20,19 +20,19 @@
 #pragma warning disable 8625 // Disable "CS8625 Cannot convert null literal to non-nullable reference type"
 #pragma warning disable 8765 // Disable "CS8765 Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes)."
 
-namespace PortfolioFunctions.Clients
+namespace PortfolioFunctions.Clients.Experience
 {
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ProjectsServiceClient 
+    public partial class ExperienceServiceClient 
     {
         private System.Net.Http.HttpClient _httpClient;
         private static System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings, true);
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public ProjectsServiceClient(System.Net.Http.HttpClient httpClient)
+        public ExperienceServiceClient(System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             _httpClient = httpClient;
@@ -57,22 +57,22 @@ namespace PortfolioFunctions.Clients
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
         /// <summary>
-        /// Get all professional projects
+        /// Get all work experiences
         /// </summary>
-        /// <returns>List of professional projects</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProfessionalProject>> GetProfessionalProjectsAsync()
+        /// <returns>List of work experiences</returns>
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<WorkExperience>> GetWorkExperiencesAsync()
         {
-            return GetProfessionalProjectsAsync(System.Threading.CancellationToken.None);
+            return GetWorkExperiencesAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Get all professional projects
+        /// Get all work experiences
         /// </summary>
-        /// <returns>List of professional projects</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProfessionalProject>> GetProfessionalProjectsAsync(System.Threading.CancellationToken cancellationToken)
+        /// <returns>List of work experiences</returns>
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<WorkExperience>> GetWorkExperiencesAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -85,8 +85,8 @@ namespace PortfolioFunctions.Clients
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "professional-projects"
-                    urlBuilder_.Append("professional-projects");
+                    // Operation Path: "work-experiences"
+                    urlBuilder_.Append("work-experiences");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -113,17 +113,17 @@ namespace PortfolioFunctions.Clients
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ProfessionalProject>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<WorkExperience>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ExperienceApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ExperienceApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -141,24 +141,24 @@ namespace PortfolioFunctions.Clients
         }
 
         /// <summary>
-        /// Add a new professional project
+        /// Add a new work experience
         /// </summary>
-        /// <param name="body">The project to create</param>
-        /// <returns>The created project</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProfessionalProject> AddProfessionalProjectAsync(ProfessionalProject body)
+        /// <param name="body">The work experience to create</param>
+        /// <returns>The created work experience</returns>
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<WorkExperience> AddWorkExperienceAsync(WorkExperience body)
         {
-            return AddProfessionalProjectAsync(body, System.Threading.CancellationToken.None);
+            return AddWorkExperienceAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Add a new professional project
+        /// Add a new work experience
         /// </summary>
-        /// <param name="body">The project to create</param>
-        /// <returns>The created project</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProfessionalProject> AddProfessionalProjectAsync(ProfessionalProject body, System.Threading.CancellationToken cancellationToken)
+        /// <param name="body">The work experience to create</param>
+        /// <returns>The created work experience</returns>
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<WorkExperience> AddWorkExperienceAsync(WorkExperience body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -178,8 +178,8 @@ namespace PortfolioFunctions.Clients
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "professional-projects"
-                    urlBuilder_.Append("professional-projects");
+                    // Operation Path: "work-experiences"
+                    urlBuilder_.Append("work-experiences");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -206,10 +206,10 @@ namespace PortfolioFunctions.Clients
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProfessionalProject>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<WorkExperience>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ExperienceApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -217,18 +217,18 @@ namespace PortfolioFunctions.Clients
                         if (status_ == 400)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("Invalid project data", status_, responseText_, headers_, null);
+                            throw new ExperienceApiException("Invalid work experience data", status_, responseText_, headers_, null);
                         }
                         else
                         if (status_ == 401)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                            throw new ExperienceApiException("Unauthorized", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ExperienceApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -246,24 +246,24 @@ namespace PortfolioFunctions.Clients
         }
 
         /// <summary>
-        /// Get a professional project by ID
+        /// Get a work experience by ID
         /// </summary>
-        /// <param name="id">Project ID</param>
-        /// <returns>The requested project</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProfessionalProject> GetProfessionalProjectByIdAsync(string id)
+        /// <param name="id">Work experience ID</param>
+        /// <returns>The requested work experience</returns>
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<WorkExperience> GetWorkExperienceByIdAsync(string id)
         {
-            return GetProfessionalProjectByIdAsync(id, System.Threading.CancellationToken.None);
+            return GetWorkExperienceByIdAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Get a professional project by ID
+        /// Get a work experience by ID
         /// </summary>
-        /// <param name="id">Project ID</param>
-        /// <returns>The requested project</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProfessionalProject> GetProfessionalProjectByIdAsync(string id, System.Threading.CancellationToken cancellationToken)
+        /// <param name="id">Work experience ID</param>
+        /// <returns>The requested work experience</returns>
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<WorkExperience> GetWorkExperienceByIdAsync(string id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -279,8 +279,8 @@ namespace PortfolioFunctions.Clients
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "professional-projects/{id}"
-                    urlBuilder_.Append("professional-projects/");
+                    // Operation Path: "work-experiences/{id}"
+                    urlBuilder_.Append("work-experiences/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -308,10 +308,10 @@ namespace PortfolioFunctions.Clients
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProfessionalProject>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<WorkExperience>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ExperienceApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -319,12 +319,12 @@ namespace PortfolioFunctions.Clients
                         if (status_ == 404)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("Project not found", status_, responseText_, headers_, null);
+                            throw new ExperienceApiException("Work experience not found", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ExperienceApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -342,26 +342,26 @@ namespace PortfolioFunctions.Clients
         }
 
         /// <summary>
-        /// Update an existing professional project
+        /// Update an existing work experience
         /// </summary>
-        /// <param name="id">Project ID</param>
-        /// <param name="body">The updated project data</param>
-        /// <returns>The updated project</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProfessionalProject> UpdateProfessionalProjectAsync(string id, ProfessionalProject body)
+        /// <param name="id">Work Experience ID</param>
+        /// <param name="body">The updated work experience data</param>
+        /// <returns>The updated work experience</returns>
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<WorkExperience> UpdateWorkExperienceAsync(string id, WorkExperience body)
         {
-            return UpdateProfessionalProjectAsync(id, body, System.Threading.CancellationToken.None);
+            return UpdateWorkExperienceAsync(id, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Update an existing professional project
+        /// Update an existing work experience
         /// </summary>
-        /// <param name="id">Project ID</param>
-        /// <param name="body">The updated project data</param>
-        /// <returns>The updated project</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProfessionalProject> UpdateProfessionalProjectAsync(string id, ProfessionalProject body, System.Threading.CancellationToken cancellationToken)
+        /// <param name="id">Work Experience ID</param>
+        /// <param name="body">The updated work experience data</param>
+        /// <returns>The updated work experience</returns>
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<WorkExperience> UpdateWorkExperienceAsync(string id, WorkExperience body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -384,8 +384,8 @@ namespace PortfolioFunctions.Clients
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "professional-projects/{id}"
-                    urlBuilder_.Append("professional-projects/");
+                    // Operation Path: "work-experiences/{id}"
+                    urlBuilder_.Append("work-experiences/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -413,10 +413,10 @@ namespace PortfolioFunctions.Clients
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProfessionalProject>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<WorkExperience>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ExperienceApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -424,24 +424,24 @@ namespace PortfolioFunctions.Clients
                         if (status_ == 400)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("Invalid project data", status_, responseText_, headers_, null);
+                            throw new ExperienceApiException("Invalid work experience data", status_, responseText_, headers_, null);
                         }
                         else
                         if (status_ == 401)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                            throw new ExperienceApiException("Unauthorized", status_, responseText_, headers_, null);
                         }
                         else
                         if (status_ == 404)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("Project not found", status_, responseText_, headers_, null);
+                            throw new ExperienceApiException("Work experience not found", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ExperienceApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -459,24 +459,24 @@ namespace PortfolioFunctions.Clients
         }
 
         /// <summary>
-        /// Delete a professional project
+        /// Delete a work experience
         /// </summary>
-        /// <param name="id">Project ID</param>
+        /// <param name="id">Work experience ID</param>
         /// <returns>Successfully deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeleteProfessionalProjectAsync(string id)
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task DeleteWorkExperienceAsync(string id)
         {
-            return DeleteProfessionalProjectAsync(id, System.Threading.CancellationToken.None);
+            return DeleteWorkExperienceAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Delete a professional project
+        /// Delete a work experience
         /// </summary>
-        /// <param name="id">Project ID</param>
+        /// <param name="id">Work experience ID</param>
         /// <returns>Successfully deleted</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeleteProfessionalProjectAsync(string id, System.Threading.CancellationToken cancellationToken)
+        /// <exception cref="ExperienceApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task DeleteWorkExperienceAsync(string id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -491,8 +491,8 @@ namespace PortfolioFunctions.Clients
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "professional-projects/{id}"
-                    urlBuilder_.Append("professional-projects/");
+                    // Operation Path: "work-experiences/{id}"
+                    urlBuilder_.Append("work-experiences/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -526,18 +526,18 @@ namespace PortfolioFunctions.Clients
                         if (status_ == 401)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                            throw new ExperienceApiException("Unauthorized", status_, responseText_, headers_, null);
                         }
                         else
                         if (status_ == 404)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("Project not found", status_, responseText_, headers_, null);
+                            throw new ExperienceApiException("Work experience not found", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ExperienceApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -607,7 +607,7 @@ namespace PortfolioFunctions.Clients
                 catch (Newtonsoft.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
-                    throw new ApiException(message, (int)response.StatusCode, responseText, headers, exception);
+                    throw new ExperienceApiException(message, (int)response.StatusCode, responseText, headers, exception);
                 }
             }
             else
@@ -626,7 +626,7 @@ namespace PortfolioFunctions.Clients
                 catch (Newtonsoft.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
-                    throw new ApiException(message, (int)response.StatusCode, string.Empty, headers, exception);
+                    throw new ExperienceApiException(message, (int)response.StatusCode, string.Empty, headers, exception);
                 }
             }
         }
@@ -687,29 +687,50 @@ namespace PortfolioFunctions.Clients
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ProfessionalProject
+    public partial class Role
+    {
+
+        [Newtonsoft.Json.JsonProperty("title", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Title { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("period", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Period { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("location", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Location { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("bullets", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Bullets { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class WorkExperience
     {
 
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Id { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        [Newtonsoft.Json.JsonProperty("company", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Company { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
+        [Newtonsoft.Json.JsonProperty("companyWebsite", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string CompanyWebsite { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("developerCommentary", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string DeveloperCommentary { get; set; }
+        [Newtonsoft.Json.JsonProperty("totalDuration", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string TotalDuration { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("marketingSiteUrl", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string MarketingSiteUrl { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("demoUrl", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string DemoUrl { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("screenshots", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> Screenshots { get; set; }
+        [Newtonsoft.Json.JsonProperty("roles", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<Role> Roles { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -725,7 +746,7 @@ namespace PortfolioFunctions.Clients
 
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ApiException : System.Exception
+    public partial class ExperienceApiException : System.Exception
     {
         public int StatusCode { get; private set; }
 
@@ -733,7 +754,7 @@ namespace PortfolioFunctions.Clients
 
         public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
 
-        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
+        public ExperienceApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
             : base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + ((response == null) ? "(null)" : response.Substring(0, response.Length >= 512 ? 512 : response.Length)), innerException)
         {
             StatusCode = statusCode;
@@ -748,11 +769,11 @@ namespace PortfolioFunctions.Clients
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ApiException<TResult> : ApiException
+    public partial class ExperienceApiException<TResult> : ExperienceApiException
     {
         public TResult Result { get; private set; }
 
-        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
+        public ExperienceApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
             : base(message, statusCode, response, headers, innerException)
         {
             Result = result;

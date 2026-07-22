@@ -1,8 +1,6 @@
-using System;
-using Microsoft.Azure.Cosmos;
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PortfolioFunctions.Clients;
 
 namespace PortfolioFunctions
 {
@@ -14,21 +12,18 @@ namespace PortfolioFunctions
                 .ConfigureFunctionsWorkerDefaults()
                 .ConfigureServices(services =>
                 {
-                    services.AddSingleton(_ =>
+                    services.AddHttpClient<ProjectsServiceClient>(client =>
                     {
-                        var connectionString = Environment.GetEnvironmentVariable("CosmosDbConnection");
-                        var client = new CosmosClient(connectionString);
+                        var baseUrl = Environment.GetEnvironmentVariable("ProjectsServiceBaseUrl")
+                            ?? "http://localhost:7072/api/";
+                        client.BaseAddress = new Uri(baseUrl);
+                    });
 
-                        // Auto-create database and containers on first run
-                        var databaseName = Environment.GetEnvironmentVariable("CosmosDbDatabaseName");
-                        var professionalProjectsContainer = Environment.GetEnvironmentVariable("CosmosDbContainerName");
-                        var workExperienceContainer = Environment.GetEnvironmentVariable("CosmosDbWorkExperienceContainerName");
-                        
-                        var database = client.CreateDatabaseIfNotExistsAsync(databaseName).GetAwaiter().GetResult();
-                        database.Database.CreateContainerIfNotExistsAsync(professionalProjectsContainer, "/id").GetAwaiter().GetResult();
-                        database.Database.CreateContainerIfNotExistsAsync(workExperienceContainer, "/id").GetAwaiter().GetResult();
-
-                        return client;
+                    services.AddHttpClient<ExperienceServiceClient>(client =>
+                    {
+                        var baseUrl = Environment.GetEnvironmentVariable("ExperienceServiceBaseUrl")
+                            ?? "http://localhost:7073/api/";
+                        client.BaseAddress = new Uri(baseUrl);
                     });
                 })
                 .Build();

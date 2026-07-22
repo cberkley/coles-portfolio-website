@@ -9,6 +9,8 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PortfolioFunctions.Clients;
+using PortfolioFunctions.Clients.Projects;
 using PortfolioFunctions.Models;
 using PortfolioFunctions.Utility;
 
@@ -17,15 +19,12 @@ namespace PortfolioFunctions.Functions
     public class ProfessionalProjectFunctions
     {
         private readonly ILogger _logger;
-        private readonly Container _container;
+        private readonly ProjectsServiceClient _projectsServiceClient;
 
-        public ProfessionalProjectFunctions(ILoggerFactory loggerFactory, CosmosClient cosmosClient)
+        public ProfessionalProjectFunctions(ILoggerFactory loggerFactory, ProjectsServiceClient projectsServiceClient)
         {
             _logger = loggerFactory.CreateLogger<ProfessionalProjectFunctions>();
-
-            var databaseName = Environment.GetEnvironmentVariable("CosmosDbDatabaseName");
-            var containerName = Environment.GetEnvironmentVariable("CosmosDbContainerName");
-            _container = cosmosClient.GetContainer(databaseName, containerName);
+            _projectsServiceClient = projectsServiceClient;
         }
 
         [Function("GetProfessionalProjects")]
@@ -34,17 +33,9 @@ namespace PortfolioFunctions.Functions
         public async Task<HttpResponseData> GetProfessionalProjects(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "professional-projects")] HttpRequestData req)
         {
-            _logger.LogInformation("Retrieving professional projects from Cosmos DB.");
+            _logger.LogInformation("Retrieving professional projects from the projects service.");
 
-            var projects = new List<ProfessionalProject>();
-            var query = new QueryDefinition("SELECT * FROM c");
-
-            using var iterator = _container.GetItemQueryIterator<ProfessionalProject>(query);
-            while (iterator.HasMoreResults)
-            {
-                var page = await iterator.ReadNextAsync();
-                projects.AddRange(page);
-            }
+            var projects = await _projectsServiceClient.GetProfessionalProjectsAsync();
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(projects);
@@ -60,16 +51,16 @@ namespace PortfolioFunctions.Functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
         {
-            _logger.LogInformation("Retrieving a professional project by id from Cosmos DB.");
+            _logger.LogInformation("Retrieving a professional project by id from the projects service.");
 
             try
             {
-                var response = await _container.ReadItemAsync<ProfessionalProject>(id, new PartitionKey(id));
+                var project = await _projectsServiceClient.GetProfessionalProjectByIdAsync(id);
                 var result = req.CreateResponse(HttpStatusCode.OK);
-                await result.WriteAsJsonAsync(response.Resource);
+                await result.WriteAsJsonAsync(project);
                 return result;
             }
-            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ProjectsApiException ex) when (ex.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 var notFound = req.CreateResponse(HttpStatusCode.NotFound);
                 await notFound.WriteStringAsync($"Project with id '{id}' not found.");
@@ -90,28 +81,30 @@ namespace PortfolioFunctions.Functions
             if (!AuthHelper.IsAuthenticated(req))
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
 
-            _logger.LogInformation("Adding a professional project to Cosmos DB.");
+            _logger.LogInformation("Adding a professional project to the projects service.");
 
-            var project = await req.ReadFromJsonAsync<ProfessionalProject>();
-            if (project == null || string.IsNullOrWhiteSpace(project.Name))
+            try
+            {
+                var newProject = await req.ReadFromJsonAsync<ProfessionalProject>();
+                if (newProject == null || string.IsNullOrWhiteSpace(newProject.Name))
+                {
+                    var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
+                    await badRequest.WriteStringAsync("A project with at least a 'name' is required.");
+                    return badRequest;
+                }
+
+                var createdProject = await _projectsServiceClient.AddProfessionalProjectAsync(newProject);
+
+                var result = req.CreateResponse(HttpStatusCode.Created);
+                await result.WriteAsJsonAsync(createdProject);
+                return result;
+            }
+            catch (ProjectsApiException ex) when (ex.StatusCode == (int)HttpStatusCode.BadRequest)
             {
                 var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequest.WriteStringAsync("A project with at least a 'name' is required.");
+                await badRequest.WriteStringAsync("Invalid project data.");
                 return badRequest;
             }
-
-            if (string.IsNullOrWhiteSpace(project.Id))
-            {
-                project.Id = Guid.NewGuid().ToString();
-            }
-
-            var created = await _container.CreateItemAsync(
-                project,
-                new PartitionKey(project.Id));
-
-            var response = req.CreateResponse(HttpStatusCode.Created);
-            await response.WriteAsJsonAsync(created.Resource);
-            return response;
         }
 
         [Function("UpdateProfessionalProject")]
@@ -130,34 +123,35 @@ namespace PortfolioFunctions.Functions
             if (!AuthHelper.IsAuthenticated(req))
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
 
-            _logger.LogInformation("Updating a professional project in Cosmos DB.");
-
-            var updatedProject = await req.ReadFromJsonAsync<ProfessionalProject>();
-            if (updatedProject == null || string.IsNullOrWhiteSpace(updatedProject.Name))
-            {
-                var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequest.WriteStringAsync("A project with at least a 'name' is required.");
-                return badRequest;
-            }
-
-            updatedProject.Id = id;
+            _logger.LogInformation("Updating a professional project in the projects service.");
 
             try
             {
-                var response = await _container.ReplaceItemAsync(
-                    updatedProject,
-                    id,
-                    new PartitionKey(id));
+                var updatedProject = await req.ReadFromJsonAsync<ProfessionalProject>();
+                if (updatedProject == null || string.IsNullOrWhiteSpace(updatedProject.Name))
+                {
+                    var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
+                    await badRequest.WriteStringAsync("A project with at least a 'name' is required.");
+                    return badRequest;
+                }
+
+                var resultProject = await _projectsServiceClient.UpdateProfessionalProjectAsync(id, updatedProject);
 
                 var result = req.CreateResponse(HttpStatusCode.OK);
-                await result.WriteAsJsonAsync(response.Resource);
+                await result.WriteAsJsonAsync(resultProject);
                 return result;
             }
-            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ProjectsApiException ex) when (ex.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 var notFound = req.CreateResponse(HttpStatusCode.NotFound);
                 await notFound.WriteStringAsync($"Project with id '{id}' not found.");
                 return notFound;
+            }
+            catch (ProjectsApiException ex) when (ex.StatusCode == (int)HttpStatusCode.BadRequest)
+            {
+                var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequest.WriteStringAsync("Invalid project data.");
+                return badRequest;
             }
         }
 
@@ -175,15 +169,16 @@ namespace PortfolioFunctions.Functions
             if (!AuthHelper.IsAuthenticated(req))
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
 
-            _logger.LogInformation("Deleting a professional project from Cosmos DB.");
+            _logger.LogInformation("Deleting a professional project from the projects service.");
 
             try
             {
-                var response = await _container.DeleteItemAsync<ProfessionalProject>(id, new PartitionKey(id));
+                await _projectsServiceClient.DeleteProfessionalProjectAsync(id);
+
                 var result = req.CreateResponse(HttpStatusCode.NoContent);
                 return result;
             }
-            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ProjectsApiException ex) when (ex.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 var notFound = req.CreateResponse(HttpStatusCode.NotFound);
                 await notFound.WriteStringAsync($"Project with id '{id}' not found.");
