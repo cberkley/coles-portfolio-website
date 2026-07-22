@@ -3,6 +3,10 @@ using Microsoft.Extensions.Hosting;
 using PortfolioFunctions.Clients.Projects;
 using PortfolioFunctions.Clients.Experience;
 using PortfolioFunctions.Utility;
+using Microsoft.Azure.Functions.Worker;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Azure.Core.Serialization;
 
 namespace PortfolioFunctions
 {
@@ -31,7 +35,15 @@ namespace PortfolioFunctions
                         client.BaseAddress = new Uri(baseUrl);
                     }).AddHttpMessageHandler<ForwardClientPrincipalHeaderHandler>();
 
-                    
+                    services.Configure<WorkerOptions>(options =>
+                    {
+                        options.Serializer = new JsonObjectSerializer(new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                        });
+                    });
                 })
                 .Build();
 
