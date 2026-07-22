@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using PortfolioFunctions.Clients;
 using PortfolioFunctions.Clients.Projects;
-using PortfolioFunctions.Models;
 using PortfolioFunctions.Utility;
 
 namespace PortfolioFunctions.Functions
@@ -21,10 +15,13 @@ namespace PortfolioFunctions.Functions
         private readonly ILogger _logger;
         private readonly ProjectsServiceClient _projectsServiceClient;
 
-        public ProfessionalProjectFunctions(ILoggerFactory loggerFactory, ProjectsServiceClient projectsServiceClient)
+        private readonly ClientPrincipalForwardingContext _forwardingContext;
+
+        public ProfessionalProjectFunctions(ILoggerFactory loggerFactory, ProjectsServiceClient projectsServiceClient, ClientPrincipalForwardingContext forwardingContext)
         {
             _logger = loggerFactory.CreateLogger<ProfessionalProjectFunctions>();
             _projectsServiceClient = projectsServiceClient;
+            _forwardingContext = forwardingContext;
         }
 
         [Function("GetProfessionalProjects")]
@@ -78,8 +75,15 @@ namespace PortfolioFunctions.Functions
         public async Task<HttpResponseData> AddProfessionalProject(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "professional-projects")] HttpRequestData req)
         {
-            if (!AuthHelper.IsAuthenticated(req))
+            if (!AuthHelper.IsAuthenticated(req)) {
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
+            //we need to forward the client principal ID to the downstream service
+            //this is important so that in the future I can also implement a front end 
+            // on that service and also use the same authentication and authorization 
+            // mechanism
+            using var scope = _forwardingContext.ForwardRequestHeader(req);
 
             _logger.LogInformation("Adding a professional project to the projects service.");
 
@@ -120,8 +124,11 @@ namespace PortfolioFunctions.Functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
         {
-            if (!AuthHelper.IsAuthenticated(req))
+            if (!AuthHelper.IsAuthenticated(req)) {
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
+            using var scope = _forwardingContext.ForwardRequestHeader(req);
 
             _logger.LogInformation("Updating a professional project in the projects service.");
 
@@ -166,8 +173,11 @@ namespace PortfolioFunctions.Functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "professional-projects/{id}")] HttpRequestData req,
             string id)
         {
-            if (!AuthHelper.IsAuthenticated(req))
+            if (!AuthHelper.IsAuthenticated(req)) {
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
+            using var scope = _forwardingContext.ForwardRequestHeader(req);
 
             _logger.LogInformation("Deleting a professional project from the projects service.");
 

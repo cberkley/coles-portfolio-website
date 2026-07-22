@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -10,7 +6,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PortfolioFunctions.Clients.Experience;
-using PortfolioFunctions.Models;
 using PortfolioFunctions.Utility;
 
 namespace PortfolioFunctions.Functions
@@ -19,11 +14,13 @@ namespace PortfolioFunctions.Functions
     {
         private readonly ILogger _logger;
         private readonly ExperienceServiceClient _experienceServiceClient;
+        private readonly ClientPrincipalForwardingContext _forwardingContext;
 
-        public WorkExperienceFunctions(ILoggerFactory loggerFactory, ExperienceServiceClient experienceServiceClient)
+        public WorkExperienceFunctions(ILoggerFactory loggerFactory, ExperienceServiceClient experienceServiceClient, ClientPrincipalForwardingContext clientPrincipalForwardingContext)
         {
             _logger = loggerFactory.CreateLogger<WorkExperienceFunctions>();
             _experienceServiceClient = experienceServiceClient;
+            _forwardingContext = clientPrincipalForwardingContext;
         }
 
         [Function("GetWorkExperiences")]
@@ -77,10 +74,17 @@ namespace PortfolioFunctions.Functions
         public async Task<HttpResponseData> AddWorkExperience(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "work-experiences")] HttpRequestData req)
         {
-            if (!AuthHelper.IsAuthenticated(req))
+            if (!AuthHelper.IsAuthenticated(req)) {
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
+            }
 
             _logger.LogInformation("Adding a work experience to the experience service.");
+
+            //we need to forward the client principal ID to the downstream service
+            //this is important so that in the future I can also implement a front end 
+            // on that service and also use the same authentication and authorization 
+            // mechanism
+            using var scope = _forwardingContext.ForwardRequestHeader(req);
 
             var workExperience = await req.ReadFromJsonAsync<WorkExperience>();
             if (workExperience == null || string.IsNullOrWhiteSpace(workExperience.Company))
@@ -115,8 +119,11 @@ namespace PortfolioFunctions.Functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "work-experiences/{id}")] HttpRequestData req,
             string id)
         {
-            if (!AuthHelper.IsAuthenticated(req))
+            if (!AuthHelper.IsAuthenticated(req)) {
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
+            using var scope = _forwardingContext.ForwardRequestHeader(req);
 
             _logger.LogInformation("Updating a work experience in Cosmos DB.");
 
@@ -161,6 +168,8 @@ namespace PortfolioFunctions.Functions
                 return req.CreateResponse(HttpStatusCode.Unauthorized);
 
             _logger.LogInformation("Deleting a work experience from the experience service.");
+
+            using var scope = _forwardingContext.ForwardRequestHeader(req);
 
             try
             {
