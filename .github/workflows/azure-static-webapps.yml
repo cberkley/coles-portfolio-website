@@ -27,7 +27,6 @@ jobs:
         with:
           app-name: cole-portfolio-functions
           package: ./publish
-          publish-profile: ${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}
 
   build_and_deploy_swa:
     runs-on: ubuntu-latest
