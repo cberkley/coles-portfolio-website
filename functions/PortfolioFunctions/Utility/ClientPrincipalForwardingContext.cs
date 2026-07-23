@@ -8,21 +8,20 @@ namespace PortfolioFunctions.Utility
 
         public string? CurrentClientPrincipalId => CurrentPrincipalId.Value;
 
+        // Forward the client principal ID from the request header to the downstream service
+        internal IDisposable ForwardRequestHeader(HttpRequestData req)
+        {
+            var clientPrincipalId = AuthHelper.GetClientPrincipalId(req);
+            var scope = BeginScope(clientPrincipalId);
+            
+            return scope;
+        }
+
         public IDisposable BeginScope(string? clientPrincipalId)
         {
             var previous = CurrentPrincipalId.Value;
             CurrentPrincipalId.Value = clientPrincipalId;
             return new RestoreScope(previous);
-        }
-
-        // Forward the client principal ID from the request header to the downstream service
-        internal IDisposable ForwardRequestHeader(HttpRequestData req)
-        {
-            req.Headers.TryGetValues("X-MS-CLIENT-PRINCIPAL-ID", out var values);
-            var clientPrincipalId = values?.FirstOrDefault();
-            var scope = BeginScope(clientPrincipalId);
-            
-            return scope;
         }
 
         private sealed class RestoreScope : IDisposable
